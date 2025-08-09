@@ -15,6 +15,18 @@ class ConversationManager:
         
         # Conversation flow sections
         self.sections = ['introduction', 'home_energy', 'transportation', 'consumption', 'results']
+        
+        # All required fields for progress calculation (19 total)
+        self.all_required_fields = [
+            # introduction (5 fields)
+            'name', 'city', 'state', 'household_size', 'housing_type',
+            # home_energy (5 fields)  
+            'square_footage', 'monthly_electricity', 'heating_type', 'heating_bill', 'solar_panels',
+            # transportation (6 fields)
+            'vehicle_year', 'vehicle_make', 'vehicle_model', 'annual_miles', 'domestic_flights', 'international_flights',
+            # consumption (2 fields)
+            'diet_type', 'shopping_frequency'
+        ]
     
     def _get_client(self):
         """Initialize Anthropic client lazily when first needed"""
@@ -30,18 +42,6 @@ class ConversationManager:
                 logger.error(f"Failed to initialize Anthropic client: {e}")
                 raise
         return self.client
-        
-        # All required fields for progress calculation (19 total)
-        self.all_required_fields = [
-            # introduction (5 fields)
-            'name', 'city', 'state', 'household_size', 'housing_type',
-            # home_energy (5 fields)  
-            'square_footage', 'monthly_electricity', 'heating_type', 'heating_bill', 'solar_panels',
-            # transportation (6 fields)
-            'vehicle_year', 'vehicle_make', 'vehicle_model', 'annual_miles', 'domestic_flights', 'international_flights',
-            # consumption (2 fields)
-            'diet_type', 'shopping_frequency'
-        ]
     
     def calculate_question_progress(self, responses: List) -> int:
         """Calculate progress percentage based on questions answered (0-100)."""

@@ -16,7 +16,7 @@ async function loadRecommendations() {
     try {
         showLoading();
         
-        const response = await fetch(`https://carboncoach.up.railway.app/api/recommendations/${sessionId}`);
+        const response = await fetch(`https://carbonbackend.up.railway.app/api/recommendations/${sessionId}`);
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
