@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Personalized Recommendations - Carbon Coach</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <h1 class="app-title">🌱 Carbon Coach</h1>
+                <p class="app-subtitle">Your personalized action plan</p>
+            </div>
+        </header>
+
+        <!-- Recommendations Page -->
+        <main class="recommendations-main">
+            <div class="page-header">
+                <div class="back-link">
+                    <a href="javascript:history.back()">← Back to Results</a>
+                </div>
+                <h2>🎯 Your Personalized Recommendations</h2>
+                <p class="page-subtitle">Smart investments that pay for themselves with government incentives</p>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loading-container" class="loading-container">
+                <div class="spinner"></div>
+                <p>Loading your personalized recommendations...</p>
+            </div>
+
+            <!-- Error State -->
+            <div id="error-container" class="error-container" style="display: none;">
+                <p>Unable to load recommendations. Please try again.</p>
+                <button id="retry-button" class="btn btn-primary">Retry</button>
+            </div>
+
+            <!-- Recommendations Content -->
+            <div id="recommendations-content" style="display: none;">
+                <!-- Technology Upgrades Section -->
+                <section class="recommendations-section" id="technology-section">
+                    <div class="section-header">
+                        <h3>💡 Technology Upgrades</h3>
+                    </div>
+                    <div id="technology-recommendations" class="recommendations-list">
+                        <!-- Technology recommendations will be inserted here -->
+                    </div>
+                </section>
+
+                <!-- Lifestyle Adjustments Section -->
+                <section class="recommendations-section lifestyle-section" id="lifestyle-section">
+                    <div class="section-header">
+                        <h3>🌱 Lifestyle Adjustments</h3>
+                    </div>
+                    <div id="lifestyle-recommendations" class="lifestyle-grid">
+                        <!-- Lifestyle recommendations will be inserted here -->
+                    </div>
+                </section>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="startNewAssessment()">New Assessment</button>
+                    <button class="btn btn-secondary" onclick="shareRecommendations()">Share</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="session.js"></script>
+    <script src="recommendations.js"></script>
+</body>
+</html>

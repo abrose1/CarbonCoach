@@ -1,0 +1,34 @@
+# Carbon Coach App - Specific .gitignore
+
+# Environment variables (contains ANTHROPIC_API_KEY)
+carbon-calculator/backend/.env
+
+# Database files (contains user sessions and data)
+carbon-calculator/backend/instance/*.db
+*.db
+
+# Python virtual environment (recreatable with requirements.txt)
+carbon-calculator/backend/venv/
+
+# Server logs (temporary runtime data)
+carbon-calculator/backend/server.log
+carbon-calculator/backend/*.log
+
+# Node.js dependencies (recreatable with package.json)
+node_modules/
+
+# Python cache files
+carbon-calculator/backend/__pycache__/
+carbon-calculator/backend/**/__pycache__/
+*.pyc
+
+# PostgreSQL database folder (if used)
+postgre_database/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+
+# Keep these files (examples and structure)
+!carbon-calculator/backend/.env.example
+!carbon-calculator/backend/instance/.gitkeep
