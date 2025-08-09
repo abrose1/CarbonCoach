@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
+from flask_migrate import Migrate
 from models import db
 import os
 from dotenv import load_dotenv
@@ -17,6 +18,7 @@ def create_app():
     # Initialize extensions
     db.init_app(app)
     CORS(app)
+    migrate = Migrate(app, db)
     
     # Register blueprints
     from routes import api_bp
@@ -32,6 +34,10 @@ def create_app():
     
     return app
 
+# Create the app instance for Gunicorn
+app = create_app()
+
 if __name__ == '__main__':
-    app = create_app()
-    app.run(debug=True, host='0.0.0.0', port=5001)
+    # For local development
+    port = int(os.environ.get('PORT', 5001))
+    app.run(debug=True, host='0.0.0.0', port=port)
