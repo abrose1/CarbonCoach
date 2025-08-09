@@ -153,7 +153,15 @@ def populate_initial_data():
         ]
         
         for vehicle_data in vehicle_mpg_data:
-            vehicle = VehicleMPG(**vehicle_data)
+            # Only use fields that exist in VehicleMPG model
+            clean_data = {
+                'year': vehicle_data['year'],
+                'make': vehicle_data['make'], 
+                'model': vehicle_data['model'],
+                'mpg_combined': vehicle_data['mpg_combined'],
+                'vehicle_type': vehicle_data.get('vehicle_type', 'gas')
+            }
+            vehicle = VehicleMPG(**clean_data)
             db.session.add(vehicle)
         
         # Government Programs (comprehensive list with focus on major states)
