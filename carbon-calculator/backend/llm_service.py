@@ -10,11 +10,26 @@ logger = logging.getLogger(__name__)
 
 class ConversationManager:
     def __init__(self):
-        self.client = anthropic.Anthropic(api_key=os.getenv('ANTHROPIC_API_KEY'))
+        self.client = None
         self.model = "claude-3-5-sonnet-20241022"
         
         # Conversation flow sections
         self.sections = ['introduction', 'home_energy', 'transportation', 'consumption', 'results']
+    
+    def _get_client(self):
+        """Initialize Anthropic client lazily when first needed"""
+        if self.client is None:
+            api_key = os.getenv('ANTHROPIC_API_KEY')
+            if not api_key:
+                raise ValueError("ANTHROPIC_API_KEY environment variable not set")
+            
+            try:
+                self.client = anthropic.Anthropic(api_key=api_key)
+                logger.info("Anthropic client initialized successfully")
+            except Exception as e:
+                logger.error(f"Failed to initialize Anthropic client: {e}")
+                raise
+        return self.client
         
         # All required fields for progress calculation (19 total)
         self.all_required_fields = [
@@ -202,7 +217,7 @@ Current focus: Present results and recommendations.
             system_prompt = self.get_system_prompt(session.current_section, response_context, user_responses)
             
             # Call Claude API
-            response = self.client.messages.create(
+            response = self._get_client().messages.create(
                 model=self.model,
                 max_tokens=1000,
                 system=system_prompt,
