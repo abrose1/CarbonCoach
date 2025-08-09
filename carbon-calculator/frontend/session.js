@@ -7,7 +7,7 @@ class SessionManager {
     constructor() {
         this.sessionId = null;
         this.sessionData = null;
-        this.apiBaseUrl = 'http://localhost:5001/api';
+        this.apiBaseUrl = 'https://carboncoach.up.railway.app/api';
         this.init();
     }
 
