@@ -1,2 +1,2 @@
 web: gunicorn --bind 0.0.0.0:$PORT app:app
-release: flask db upgrade
+release: FLASK_APP=app.py flask db upgrade
