@@ -28,9 +28,8 @@ def create_app():
     with app.app_context():
         db.create_all()
         
-        # Populate initial data if tables are empty
-        from data.populate_data import populate_initial_data
-        populate_initial_data()
+        # Note: Database already contains production data (DSIRE programs, vehicle MPG database)
+        # populate_initial_data() disabled to avoid conflicts with existing data
     
     return app
 
