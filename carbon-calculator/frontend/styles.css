@@ -16,7 +16,7 @@ body {
     background-position: center center;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    min-height: 100vh;
+    height: 100dvh; /* Use dynamic viewport height to match app container */
 }
 
 /* Color Variables (WCAG AA Compliant) */
@@ -32,6 +32,7 @@ body {
     --success-color: #E9F7EF;      /* Success background */
     --error-color: #DC3545;        /* Error color */
     --border-color: #DEE2E6;       /* Border gray */
+    --section-background: #E8F4F8; /* Light blue */
     --shadow-light: 0 2px 4px rgba(0, 0, 0, 0.1);
     --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
@@ -52,7 +53,7 @@ h3 { font-size: 20px; }
     max-width: 900px;
     margin: 0 auto;
     background-color: var(--background-white);
-    min-height: 100vh;
+    height: 100dvh; /* Use dynamic viewport height to account for mobile browser UI */
     display: flex;
     flex-direction: column;
     box-shadow: var(--shadow-light);
@@ -255,7 +256,7 @@ h3 { font-size: 20px; }
 
 .input-hint {
     margin-top: 0.5rem;
-    min-height: 20px;
+    min-height: 0; /* Remove reserved space when empty */
 }
 
 .typing-indicator {
@@ -322,6 +323,10 @@ h3 { font-size: 20px; }
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 1rem;
     justify-content: center;
+}
+
+.calculated-breakdown .breakdown-item {
+    background-color: var(--section-background);
 }
 
 .breakdown-item {
@@ -548,6 +553,7 @@ h3 { font-size: 20px; }
     
     .action-buttons {
         flex-direction: column;
+        padding-bottom: 2rem; /* Extra padding to avoid rounded screen corners */
     }
     
     .error-toast {
@@ -572,6 +578,16 @@ h3 { font-size: 20px; }
     
     .chat-input-container {
         padding: 0.75rem;
+        transition: transform 0.3s ease;
+    }
+    
+    /* Keep the good parts */
+    .keyboard-detected .input-hint {
+        display: none;
+    }
+    
+    .keyboard-detected .progress-container {
+        display: none;
     }
     
     .results-section {
@@ -677,6 +693,12 @@ h3 { font-size: 20px; }
 }
 
 /* ========== RECOMMENDATIONS PAGE STYLES ========== */
+
+/* Allow recommendations page to grow beyond single page height */
+body:has(.recommendations-main) .app-container {
+    height: auto;
+    min-height: 100dvh;
+}
 
 .recommendations-main {
     padding: 1rem;
@@ -868,11 +890,40 @@ h3 { font-size: 20px; }
     padding: 0.75rem;
 }
 
-.programs-summary {
+.programs-summary-button {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: var(--background-light);
+    border: 2px solid var(--accent-color);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--accent-color);
+    transition: all 0.2s ease;
+}
+
+.programs-summary-button:hover {
+    background: var(--accent-color);
+    color: white;
+}
+
+.programs-summary-button .arrow {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform 0.2s ease;
+}
+
+.programs-summary-button.expanded .arrow {
+    transform: rotate(-135deg);
 }
 
 .funding-total {
@@ -909,6 +960,42 @@ h3 { font-size: 20px; }
 }
 
 .dropdown-arrow.expanded .arrow {
+    transform: rotate(-135deg);
+}
+
+.programs-summary-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: var(--background-light);
+    border: 2px solid var(--accent-color);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--accent-color);
+    transition: all 0.2s ease;
+}
+
+.programs-summary-button:hover {
+    background: var(--accent-color);
+    color: white;
+}
+
+.programs-summary-button .arrow {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform 0.2s ease;
+}
+
+.programs-summary-button.expanded .arrow {
     transform: rotate(-135deg);
 }
 
@@ -1202,6 +1289,18 @@ h3 { font-size: 20px; }
     }
     
     .dropdown-arrow .arrow {
+        width: 6px;
+        height: 6px;
+        border-right-width: 1.5px;
+        border-bottom-width: 1.5px;
+    }
+    
+    .programs-summary-button {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.8rem;
+    }
+    
+    .programs-summary-button .arrow {
         width: 6px;
         height: 6px;
         border-right-width: 1.5px;

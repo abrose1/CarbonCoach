@@ -91,7 +91,59 @@ class CarbonCalculatorApp {
                 window.location.href = 'recommendations.html';
             });
         }
+        
+        // Mobile keyboard handling
+        this.setupMobileKeyboardHandling(userInput);
     }
+
+    /**
+     * Setup mobile keyboard handling to prevent input from being covered
+     */
+    setupMobileKeyboardHandling(userInput) {
+        // Handle input focus with chat scrolling
+        userInput.addEventListener('focusin', () => {
+            // Scroll chat to bottom
+            setTimeout(() => {
+                const chatMessages = document.querySelector('.chat-messages');
+                if (chatMessages) {
+                    chatMessages.scrollTo({
+                        top: chatMessages.scrollHeight,
+                        behavior: 'smooth'
+                    });
+                }
+            }, 300);
+        });
+        
+        // Visual Viewport API for accurate keyboard detection (no positioning, just class management)
+        if (window.visualViewport) {
+            let initialHeight = window.visualViewport.height;
+            
+            window.visualViewport.addEventListener('resize', () => {
+                const currentHeight = window.visualViewport.height;
+                
+                // If viewport is smaller than initial, keyboard is probably open
+                if (currentHeight < initialHeight) {
+                    document.body.classList.add('keyboard-detected');
+                    
+                    // Give the reclaimed space to chat-container (exact progress bar dimensions)
+                    const chatContainer = document.querySelector('.chat-container');
+                    if (chatContainer) {
+                        // Progress bar: 1rem top + 0.5rem bottom + 8px bar + 8px margin + 1px border
+                        chatContainer.style.maxHeight = `calc(100vh - 200px + 1.5rem + 17px)`;
+                    }
+                } else {
+                    document.body.classList.remove('keyboard-detected');
+                    
+                    // Reset chat container max height
+                    const chatContainer = document.querySelector('.chat-container');
+                    if (chatContainer) {
+                        chatContainer.style.maxHeight = 'calc(100vh - 200px)';
+                    }
+                }
+            });
+        }
+    }
+
 
     /**
      * Display welcome message

@@ -18,8 +18,8 @@
   - 56 emission factors + 51 electricity rates
 
 ### 2. frontend (NGINX Static Site)
-- **Domain**: https://frontend-production-ab38.up.railway.app
-- **Source**: `site/` directory (NGINX container)
+- **Domain**: https://carboncoach.up.railway.app
+- **Source**: `carbon-calculator/frontend/` directory (NGINX container)
 - **Runtime**: NGINX Alpine serving static HTML/CSS/JS
 - **API Calls**: Points to carbonbackend.up.railway.app backend
 
@@ -101,21 +101,28 @@ SECRET_KEY=a9edb0b2...
 ```
 CarbonCoach/
 ├── carbon-calculator/
-│   ├── backend/          # Flask API (ROOT_PATH should point here)
+│   ├── backend/          # Flask API service (web-service deploys from here)
 │   │   ├── app.py
 │   │   ├── requirements.txt
 │   │   ├── Procfile
 │   │   └── ...
-│   └── frontend/         # Source files for NGINX service
+│   └── frontend/         # NGINX service (frontend deploys from here)
 │       ├── index.html
 │       ├── styles.css
+│       ├── Dockerfile    # NGINX container config
 │       └── ...
-├── site/                 # NGINX deployment directory
-└── Dockerfile           # NGINX container config
+├── frontend.Dockerfile   # Alternative Dockerfile (not used)
+├── requirements.txt      # Root requirements (not used)
+└── runtime.txt          # Root runtime (not used)
 ```
 
 ## Deployment Process
 
-1. **Backend**: Deploys from `carbon-calculator/backend/` using Nixpacks Python detection
-2. **Frontend**: Uses custom Dockerfile + NGINX to serve `site/` directory
-3. **Database**: Managed PostgreSQL service, connect via `railway connect postgres`
+1. **Backend (web-service)**: Deploys from `carbon-calculator/backend/` using Nixpacks Python detection with Gunicorn
+2. **Frontend**: Uses custom Dockerfile + NGINX to serve `carbon-calculator/frontend/` directory
+3. **Database (postgres)**: Managed PostgreSQL service with production data, connect via `railway connect postgres`
+
+## Current Deployment Status
+- **Frontend URL**: https://carboncoach.up.railway.app
+- **Backend API**: https://carbonbackend.up.railway.app  
+- **Database**: postgres-production-faa4.up.railway.app (internal: postgres.railway.internal:5432)

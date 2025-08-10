@@ -75,9 +75,6 @@ function showNoRecommendations() {
 }
 
 function displayRecommendations(technologyRecs, lifestyleRecs) {
-    console.log('Displaying technology recs:', technologyRecs);
-    console.log('Displaying lifestyle recs:', lifestyleRecs);
-    
     document.getElementById('loading-container').style.display = 'none';
     document.getElementById('error-container').style.display = 'none';
     document.getElementById('recommendations-content').style.display = 'block';
@@ -134,12 +131,8 @@ function displayRecommendations(technologyRecs, lifestyleRecs) {
 function displayTechnologyRecommendations(recommendations) {
     const container = document.getElementById('technology-recommendations');
     
-    console.log('All technology recommendations:', recommendations);
-    
     // Group recommendations by technology type
     const groupedRecs = groupRecommendationsByType(recommendations);
-    
-    console.log('Grouped recommendations:', groupedRecs);
     
     let html = '';
     
@@ -289,16 +282,14 @@ function createGroupedProgramContainer(recommendations, index) {
         return '';
     }
     
-    const fundingText = 'Financial incentives available';
+    const fundingText = 'View Available Incentives';
     
     return `
         <div class="programs-container">
-            <div class="programs-summary">
+            <button class="programs-summary-button" data-target="${programId}">
                 <span class="funding-total">${fundingText}</span>
-                <button class="dropdown-arrow" data-target="${programId}">
-                    <span class="arrow"></span>
-                </button>
-            </div>
+                <span class="arrow"></span>
+            </button>
             
             <div class="programs-details" id="${programId}">
                 <div class="program-tabs">
@@ -422,16 +413,16 @@ function getFinancialPillForGroup(recommendations) {
 }
 
 function setupEventHandlers() {
-    // Handle dropdown arrow clicks
+    // Handle dropdown button clicks
     document.addEventListener('click', function(e) {
-        if (e.target.closest('.dropdown-arrow')) {
-            const arrow = e.target.closest('.dropdown-arrow');
-            const targetId = arrow.getAttribute('data-target');
+        if (e.target.closest('.programs-summary-button')) {
+            const button = e.target.closest('.programs-summary-button');
+            const targetId = button.getAttribute('data-target');
             const targetSection = document.getElementById(targetId);
             
             if (targetSection) {
                 targetSection.classList.toggle('active');
-                arrow.classList.toggle('expanded');
+                button.classList.toggle('expanded');
             }
         }
         

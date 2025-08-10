@@ -26,7 +26,7 @@ Backend: Python3 Flask + SQLAlchemy + SQLite
 - Diagnostic & lifestyle recommendation engines
 - Government program database (DSIRE) with 1000+ programs
 
-Deployment: Local development (backend: port 5001, frontend: port 8000) for now, eventually Railway
+Deployment: Railway production (backend: carbonbackend.up.railway.app, frontend: carboncoach.up.railway.app, postgres: managed PostgreSQL). Local development also supported (backend: port 5001, frontend: port 80 via NGINX Docker)
 Data Strategy: Curated government programs, static emission factors, comprehensive vehicle MPG database
 Database Schema
 sql
