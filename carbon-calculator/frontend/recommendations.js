@@ -185,7 +185,7 @@ function displayLifestyleRecommendations(recommendations) {
                         <h4>${getStructuredTitle(rec)}</h4>
                         <div class="rec-impact">
                             <span class="co2-savings">Save ~${rec.co2_savings_kg ? Math.round(rec.co2_savings_kg).toLocaleString() : 'TBD'} kg CO₂/year</span>
-                            <span class="cost-savings">${rec.cost_savings ? `Save ~$${rec.cost_savings.toLocaleString()}/year` : 'Savings potential calculated'}</span>
+                            ${rec.cost_savings ? `<span class="cost-savings">Save ~$${rec.cost_savings.toLocaleString()}/year</span>` : ''}
                         </div>
                     </div>
                 </div>
@@ -282,7 +282,7 @@ function createGroupedProgramContainer(recommendations, index) {
         return '';
     }
     
-    const fundingText = 'View Available Incentives';
+    const fundingText = '💰 View Available Incentives';
     
     return `
         <div class="programs-container">
@@ -458,7 +458,7 @@ function shareRecommendations() {
     
     if (navigator.share) {
         navigator.share({
-            title: 'I just used Carbon Coach to calculate my carbon footprint and get personalized recommendations! 🌱',
+            title: 'Share Carbon Coach!',
             text: shareMessage,
             url: mainSiteUrl
         });
@@ -479,7 +479,7 @@ function generateShareMessage() {
     const techCards = document.querySelectorAll('.recommendation-card');
     const lifestyleCards = document.querySelectorAll('.lifestyle-card');
     
-    let message = "";
+    let message = "I just used Carbon Coach to calculate my carbon footprint and get personalized recommendations! 🌱 \n";
     
     // Add technology recommendations summary
     if (techCards.length > 0) {

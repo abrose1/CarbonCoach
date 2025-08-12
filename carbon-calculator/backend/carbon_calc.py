@@ -285,7 +285,9 @@ def calculate_total_footprint(home_emissions: float, transport_emissions: float,
     
     # US average is about 16 tons CO2 per person per year
     us_average_tons = 16.0
-    percentage_of_average = (total_annual_tons / us_average_tons) * 100
+    
+    # Paris Climate Accord target: 2 degrees goal requires ~5 tons CO2 per person per year by 2050
+    paris_target_tons = 5.0
     
     return {
         'total_kg_co2': total_annual_kg,
@@ -294,10 +296,5 @@ def calculate_total_footprint(home_emissions: float, transport_emissions: float,
         'transport_emissions': transport_emissions,
         'consumption_emissions': consumption_emissions,
         'us_average_tons': us_average_tons,
-        'percentage_of_us_average': percentage_of_average,
-        'emissions_breakdown': {
-            'home_percent': (home_emissions / total_annual_kg * 100) if total_annual_kg > 0 else 0,
-            'transport_percent': (transport_emissions / total_annual_kg * 100) if total_annual_kg > 0 else 0,
-            'consumption_percent': (consumption_emissions / total_annual_kg * 100) if total_annual_kg > 0 else 0
-        }
+        'paris_target_tons': paris_target_tons,
     }

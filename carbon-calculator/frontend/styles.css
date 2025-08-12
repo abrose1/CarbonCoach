@@ -310,6 +310,15 @@ h3 { font-size: 20px; }
     margin-top: 0.5rem;
 }
 
+.comparison-item {
+    margin-bottom: 0.25rem;
+}
+
+.comparison-item.paris-target {
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
 .emissions-breakdown {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -692,6 +701,15 @@ h3 { font-size: 20px; }
     }
 }
 
+@keyframes subtleGlow {
+    0%, 100% {
+        box-shadow: 0 3px 15px rgba(82, 183, 136, 0.3);
+    }
+    50% {
+        box-shadow: 0 4px 18px rgba(82, 183, 136, 0.4);
+    }
+}
+
 /* ========== RECOMMENDATIONS PAGE STYLES ========== */
 
 /* Allow recommendations page to grow beyond single page height */
@@ -896,30 +914,40 @@ body:has(.recommendations-main) .app-container {
     justify-content: space-between;
     gap: 1rem;
     width: 100%;
-    padding: 0.75rem 1rem;
-    background: var(--background-light);
-    border: 2px solid var(--accent-color);
-    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    background: linear-gradient(135deg, var(--accent-color) 0%, #40A878 100%);
+    border: none;
+    border-radius: 12px;
     cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--accent-color);
-    transition: all 0.2s ease;
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 15px rgba(82, 183, 136, 0.3);
+    position: relative;
+    overflow: hidden;
+    animation: subtleGlow 3s ease-in-out infinite;
 }
 
 .programs-summary-button:hover {
-    background: var(--accent-color);
-    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 20px rgba(82, 183, 136, 0.4);
+    background: linear-gradient(135deg, #5BC08E 0%, var(--accent-color) 100%);
+}
+
+.programs-summary-button:active {
+    transform: translateY(0);
 }
 
 .programs-summary-button .arrow {
     display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-right: 2px solid currentColor;
-    border-bottom: 2px solid currentColor;
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid white;
+    border-bottom: 2px solid white;
     transform: rotate(45deg);
-    transition: transform 0.2s ease;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
 }
 
 .programs-summary-button.expanded .arrow {
@@ -928,10 +956,13 @@ body:has(.recommendations-main) .app-container {
 
 .funding-total {
     font-weight: 600;
-    color: var(--primary-color);
-    font-size: 0.9rem;
+    color: white;
+    font-size: 1rem;
     flex-shrink: 0;
     white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .dropdown-arrow {
@@ -969,30 +1000,40 @@ body:has(.recommendations-main) .app-container {
     justify-content: space-between;
     gap: 1rem;
     width: 100%;
-    padding: 0.75rem 1rem;
-    background: var(--background-light);
-    border: 2px solid var(--accent-color);
-    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    background: linear-gradient(135deg, var(--accent-color) 0%, #40A878 100%);
+    border: none;
+    border-radius: 12px;
     cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--accent-color);
-    transition: all 0.2s ease;
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 15px rgba(82, 183, 136, 0.3);
+    position: relative;
+    overflow: hidden;
+    animation: subtleGlow 3s ease-in-out infinite;
 }
 
 .programs-summary-button:hover {
-    background: var(--accent-color);
-    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 20px rgba(82, 183, 136, 0.4);
+    background: linear-gradient(135deg, #5BC08E 0%, var(--accent-color) 100%);
+}
+
+.programs-summary-button:active {
+    transform: translateY(0);
 }
 
 .programs-summary-button .arrow {
     display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-right: 2px solid currentColor;
-    border-bottom: 2px solid currentColor;
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid white;
+    border-bottom: 2px solid white;
     transform: rotate(45deg);
-    transition: transform 0.2s ease;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
 }
 
 .programs-summary-button.expanded .arrow {

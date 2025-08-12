@@ -430,7 +430,12 @@ What's your name?`;
                 <div class="total-emissions">${estimatedTotal.toFixed(1)}</div>
                 <div class="emissions-unit">estimated tons CO₂ per year</div>
                 <div class="emissions-comparison">
-                    ${(estimatedTotal / footprint.us_average_tons * 100).toFixed(0)}% of the US average (${footprint.us_average_tons} tons)
+                    <div class="comparison-item">
+                        ${(estimatedTotal / footprint.us_average_tons * 100).toFixed(0)}% of the US average (${footprint.us_average_tons} tons)
+                    </div>
+                    <div class="comparison-item paris-target">
+                        ${(estimatedTotal / footprint.paris_target_tons * 100).toFixed(0)}% of Paris Climate target (~${footprint.paris_target_tons} tons)
+                    </div>
                 </div>
             </div>
             <div class="emissions-breakdown">
@@ -447,14 +452,8 @@ What's your name?`;
                     <div class="breakdown-label">Consumption</div>
                 </div>
             </div>
-            <div class="calculated-breakdown">
-                <div class="breakdown-item">
-                    <div class="breakdown-value">${footprint.total_tons_co2.toFixed(1)}</div>
-                    <div class="breakdown-label">Calculated from responses</div>
-                </div>
-            </div>
             <div class="footprint-explanation">
-                <p><strong>Why two numbers?</strong> The calculated total reflects your responses to our questions, which cover about 80% of typical emissions. We use a multiplier to account for other smaller factors such as public services and infrastructure, healthcare, entertainment, and the supply chains of the products you buy.</p>
+                <p><strong>How we calculate:</strong> Your responses cover about 80% of typical emissions factors. We use a multiplier to account for other smaller factors such as public services and infrastructure, healthcare, entertainment, and the supply chains of the products you buy.</p>
             </div>
         `;
         
