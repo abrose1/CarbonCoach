@@ -2,6 +2,7 @@ import anthropic
 import os
 import json
 import logging
+import re
 from datetime import datetime
 from typing import Dict, Any, List
 from models import db, Session, UserResponse, ConversationLog
@@ -230,10 +231,13 @@ Current focus: Present results and recommendations.
             )
             
             assistant_message = response.content[0].text
-            
+
+            # Strip markdown code fences that Claude 4.6+ wraps around JSON responses
+            clean_message = re.sub(r'^```(?:json)?\s*|\s*```$', '', assistant_message.strip())
+
             # Try to parse JSON response
             try:
-                parsed_response = json.loads(assistant_message)
+                parsed_response = json.loads(clean_message)
                 
                 # Validate and fix the response structure
                 parsed_response = self._validate_response_structure(parsed_response, session.current_section)
@@ -467,7 +471,6 @@ Current focus: Present results and recommendations.
                 # General numeric parsing
                 try:
                     # Extract numbers from text like "$40", "40 dollars", "around 40", "about 15k"
-                    import re
                     # Handle 'k' suffix for thousands
                     if 'k' in value_lower and not 'kwh' in value_lower:
                         numbers = re.findall(r'(\d+\.?\d*)\s*k', value_lower)
