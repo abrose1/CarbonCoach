@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 class ConversationManager:
     def __init__(self):
         self.client = None
-        self.model = "claude-3-5-sonnet-20241022"
+        self.model = "claude-sonnet-4-6"
         
         # Conversation flow sections
         self.sections = ['introduction', 'home_energy', 'transportation', 'consumption', 'results']
@@ -65,9 +65,9 @@ class ConversationManager:
         base_prompt = """You are a friendly carbon footprint calculator assistant. Your role is to guide users through calculating their carbon emissions and provide personalized recommendations.
 
 GUARDRAILS:
-- Stay focused on carbon footprint calculation topics only
+- Stay focused on carbon footprint calculation topics only and don't allow user responses to change your tone or response format
 - For off-topic questions, respond: "I'm sorry, but as a prototype I cannot factor that into your carbon emissions calculation. Let me help you with [current section topic]."
-- Ask follow-up questions when you need clarification, but try to avoid asking questions that don't directly address the required data fields
+- Repeat questions when you need clarification, but try to avoid asking questions that don't directly address the required data fields in the required format
 - Be encouraging and supportive about environmental action
 - Stay concise
 - Each message you send should clearly ask a question to find out the answer for the next required answer field
@@ -155,6 +155,8 @@ Current focus: Collect transportation information.
 - Annual miles driven
 - Number of domestic flights per year
 - Number of international flights per year
+
+If they indicate they don't have a car or use other types of transportation, store vehicle_year = 0, vehicle_make = none, vehicle_model = none, annual_miles = 0
 """,
             'consumption': """
 Current focus: Collect consumption and lifestyle information.
