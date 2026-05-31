@@ -1,3 +1,5 @@
-# Carbon Footprint Calculator & Advisory Tool
+# CarbonCoach
 
-Setup, architecture, and development documentation are in the [repository README](../README.md).
+**Live demo:** https://carboncoach.up.railway.app  
+
+Full setup, architecture, and API docs: **[repository README](../README.md)**.

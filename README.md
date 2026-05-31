@@ -1,321 +1,227 @@
-# Carbon Footprint Calculator & Advisory Tool
+# CarbonCoach
 
-A conversational web application that helps users calculate their carbon footprint and provides personalized recommendations for reduction, including relevant government incentives and tax programs.
+**Conversational carbon footprint calculator with incentive-aware reduction advice**
 
-## 🌟 Features
+[![Live app](https://img.shields.io/badge/demo-carboncoach.up.railway.app-52B788?style=for-the-badge)](https://carboncoach.up.railway.app)
+[![API health](https://img.shields.io/badge/API-health_check-1B4332?style=for-the-badge)](https://carbonbackend.up.railway.app/api/health)
 
-- **Conversational Interface**: AI-powered chat experience using Claude
-- **Comprehensive Calculations**: Home energy, transportation, and consumption emissions
-- **Government Programs**: Integration with federal and state incentive databases
-- **Mobile-Optimized**: Responsive design that works on all devices
-- **Privacy-Focused**: Session-based tracking with no user accounts required
-- **WCAG AA Compliant**: Accessible design with proper color contrast
+CarbonCoach guides people through a mobile-friendly chat to estimate annual CO₂ emissions (home, transport, consumption), then surfaces **actionable upgrades** matched to **federal and state rebate programs**—not generic “drive less” tips.
 
-## 🏗️ Architecture
-
-- **Frontend**: HTML/CSS/Vanilla JavaScript
-- **Backend**: Python Flask + SQLAlchemy + PostgreSQL
-- **AI Integration**: Direct Anthropic Claude API integration
-- **Database**: PostgreSQL with comprehensive emission factors for all 50 states
-
-## 📋 Prerequisites
-
-- Python 3.8+
-- PostgreSQL 12+
-- Anthropic API key
-- Node.js (optional, for development tools)
-
-## 🚀 Quick Start
-
-### 1. Backend Setup
-
-```bash
-# Navigate to backend directory
-cd carbon-calculator/backend
-
-# Create virtual environment
-python -m venv venv
-
-# Activate virtual environment
-# On macOS/Linux:
-source venv/bin/activate
-# On Windows:
-venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-```
-
-### 2. Database Setup
-
-```bash
-# Install PostgreSQL (macOS with Homebrew)
-brew install postgresql
-brew services start postgresql
-
-# Create database
-createdb carbon_calculator
-
-# Or use PostgreSQL command line
-psql -c "CREATE DATABASE carbon_calculator;"
-```
-
-### 3. Environment Configuration
-
-```bash
-# Copy environment template
-cp .env.example .env
-
-# Edit .env file with your settings
-```
-
-Required environment variables:
-
-```env
-ANTHROPIC_API_KEY=your_anthropic_api_key_here
-DATABASE_URL=postgresql://username:password@localhost:5432/carbon_calculator
-FLASK_ENV=development
-SECRET_KEY=your_secret_key_here
-```
-
-### 4. Run the Application
-
-```bash
-# Start the Flask backend
-python app.py
-```
-
-The backend will be available at `http://localhost:5000`
-
-### 5. Frontend Setup
-
-```bash
-# Navigate to frontend directory
-cd ../frontend
-
-# Serve the frontend (using Python's built-in server)
-python -m http.server 8000
-
-# Or use any other static file server
-# For example, with Node.js:
-# npx serve .
-```
-
-The frontend will be available at `http://localhost:8000`
-
-## 🗄️ Database Schema
-
-The application uses the following main tables:
-
-- **sessions**: Track user sessions and progress
-- **user_responses**: Store user answers by section
-- **carbon_calculations**: Store calculated carbon footprints
-- **recommendations**: Personalized reduction recommendations
-- **emission_factors**: CO2 emission factors for all 50 states
-- **vehicle_mpg**: Vehicle fuel efficiency database
-- **government_programs**: Federal and state incentive programs
-
-## 🔧 Configuration
-
-### Backend Configuration
-
-The Flask app can be configured through environment variables:
-
-- `DATABASE_URL`: PostgreSQL connection string
-- `ANTHROPIC_API_KEY`: Your Anthropic API key
-- `FLASK_ENV`: development or production
-- `SECRET_KEY`: Flask secret key for sessions
-
-### Frontend Configuration
-
-Update the API base URL in `frontend/session.js` if deploying to different domains:
-
-```javascript
-this.apiBaseUrl = 'http://localhost:5000/api'; // Change for production
-```
-
-## 🧪 Testing
-
-### Test the Backend API
-
-```bash
-# Health check
-curl http://localhost:5000/api/health
-
-# Create a session
-curl -X GET http://localhost:5000/api/session/test-session-id
-
-# Send a conversation message
-curl -X POST http://localhost:5000/api/conversation \
-  -H "Content-Type: application/json" \
-  -d '{"session_id": "test-session-id", "message": "I live in Phoenix, Arizona"}'
-```
-
-### Test the Complete User Flow
-
-1. Open `http://localhost:8000` in your browser
-2. Complete the conversation flow:
-   - **Introduction**: State/city, household size, housing type
-   - **Home Energy**: Square footage, bills, heating type, solar
-   - **Transportation**: Vehicle details, miles driven, flights
-   - **Consumption**: Diet type, shopping frequency
-3. Review results and recommendations
-
-### Example Test Data
-
-For Phoenix, AZ user testing:
-- Location: Phoenix, Arizona
-- Household: 2 people, house
-- Home: 2000 sq ft, $150 electric bill, gas heating $80/month, no solar
-- Transport: 2020 Honda Civic, 15,000 miles/year, 2 domestic flights
-- Consumption: Meat eater, moderate shopping
-
-Expected result: ~14-16 tons CO2/year with heat pump and solar recommendations
-
-## 🚢 Deployment
-
-### Railway Deployment
-
-1. Create a Railway account and project
-2. Connect your GitHub repository
-3. Set environment variables in Railway dashboard
-4. Deploy backend to Railway
-5. Update frontend API URL to Railway backend URL
-6. Deploy frontend to static hosting (Netlify, Vercel, etc.)
-
-### Environment Variables for Production
-
-```env
-ANTHROPIC_API_KEY=your_production_api_key
-DATABASE_URL=postgresql://user:pass@railway-postgres-url/dbname
-FLASK_ENV=production
-SECRET_KEY=strong_production_secret_key
-```
-
-## 📊 Data Sources
-
-- **Electricity Grid Factors**: EPA eGRID 2021
-- **Vehicle MPG**: EPA Fuel Economy Database
-- **Emission Factors**: EPA greenhouse gas emission factors
-- **Government Programs**: DSIRE database and federal program websites
-
-## 🛠️ Development
-
-### Adding New Emission Factors
-
-```python
-# In populate_data.py, add new factors:
-factor = EmissionFactor(
-    category='new_category',
-    region='US',  # or state code
-    co2_per_unit=0.123,
-    unit='kg/unit',
-    source='Data Source'
-)
-db.session.add(factor)
-```
-
-### Adding New Government Programs
-
-```python
-program = GovernmentProgram(
-    name='Program Name',
-    description='Program description',
-    program_type='rebate',  # rebate, tax_credit, loan, etc.
-    eligibility_criteria='Eligibility requirements',
-    benefit_amount='$1,000',
-    state='CA',  # or None for federal
-    federal_flag=False,
-    active_flag=True
-)
-```
-
-### Customizing the Conversation Flow
-
-Modify the conversation sections in `llm_service.py`:
-
-```python
-self.sections = ['introduction', 'home_energy', 'transportation', 'consumption', 'results']
-self.section_progress = {
-    'introduction': 20,
-    'home_energy': 40,
-    'transportation': 60,
-    'consumption': 80,
-    'results': 100
-}
-```
-
-## 🔍 Troubleshooting
-
-### Common Issues
-
-1. **Database Connection Error**
-   - Verify PostgreSQL is running
-   - Check DATABASE_URL format
-   - Ensure database exists
-
-2. **Anthropic API Error**
-   - Verify API key is correct
-   - Check API key permissions
-   - Monitor API usage limits
-
-3. **Frontend Can't Connect to Backend**
-   - Verify backend is running on port 5000
-   - Check CORS settings
-   - Update API URL in session.js
-
-4. **Empty Database**
-   - Check if populate_data.py ran successfully
-   - Manually run: `python -c "from app import create_app; from data.populate_data import populate_initial_data; app = create_app(); app.app_context().push(); populate_initial_data()"`
-
-### Logging
-
-Backend logs are printed to console. For production, configure proper logging:
-
-```python
-import logging
-logging.basicConfig(level=logging.INFO)
-```
-
-## 📚 API Documentation
-
-### Endpoints
-
-- `GET /api/session/{session_id}` - Get or create session
-- `POST /api/conversation` - Send message to conversation
-- `POST /api/calculate` - Calculate carbon footprint
-- `GET /api/calculations/{session_id}` - Get calculation results
-- `GET /api/recommendations/{session_id}` - Get recommendations
-- `GET /api/health` - Health check
-
-### Response Formats
-
-All API responses return JSON with consistent error handling:
-
-```json
-{
-  "success": true,
-  "data": {},
-  "message": "Success message"
-}
-```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 🆘 Support
-
-For support, please open an issue on GitHub or contact the development team.
+> **Design principle:** Claude runs the conversation; **Python owns the math**. Footprints and savings come from deterministic engines and curated datasets, so results stay auditable and repeatable.
 
 ---
 
-Built with ❤️ for a more sustainable future 🌍
+## Why it’s interesting
+
+| Area | What we built |
+|------|----------------|
+| **Hybrid AI + engineering** | Structured data collection via Claude (`claude-sonnet-4-6`); emissions from `carbon_calc.py`, not LLM guesses |
+| **Real-world data** | Production PostgreSQL: **13,041** vehicle MPG rows, **680** DSIRE-style programs, grid factors for all **50** states |
+| **Decision support** | Diagnostic engine (tech upgrades + program matching) and lifestyle engine (behavioral changes from calculation breakdowns) |
+| **Shipped product** | Live on Railway: NGINX frontend + Gunicorn Flask API + managed Postgres ([deployment notes](RAILWAY_SETUP.md)) |
+| **Accessible UX** | WCAG AA palette, session-based privacy (no accounts), dedicated recommendations UI |
+
+**Example flow:** User in Phoenix with gas heat and no heat pump → high heating emissions → recommend heat pump → surface relevant utility rebates and federal credits with links.
+
+---
+
+## Try it
+
+- **App:** https://carboncoach.up.railway.app  
+- **API:** https://carbonbackend.up.railway.app  
+- **Health:** `GET /api/health`
+
+---
+
+## How it works
+
+```mermaid
+flowchart LR
+  User[User browser] --> FE[Static frontend\nHTML / CSS / JS]
+  FE --> API[Flask REST API]
+  API --> LLM[Claude conversation\nllm_service.py]
+  API --> Calc[Carbon engine\ncarbon_calc.py]
+  API --> Rec[Recommendation engines\ndiagnostic + lifestyle]
+  Calc --> DB[(PostgreSQL)]
+  Rec --> DB
+  LLM --> API
+```
+
+1. **Conversation** — Five sections (intro → home → transport → consumption → results); progress tracked per session.  
+2. **Calculation** — Bills, MPG lookup, flights, diet, and grid factors produce kg CO₂/year with line-item breakdowns.  
+3. **Recommendations** — Opportunities scored and paired with DSIRE-mapped programs (rebates, tax credits, links).
+
+---
+
+## Tech stack
+
+| Layer | Choices |
+|-------|---------|
+| Frontend | Vanilla JS, mobile-first CSS, `localStorage` sessions |
+| Backend | Python 3, Flask, SQLAlchemy, Flask-Migrate |
+| AI | Anthropic API (direct integration, validated JSON extraction) |
+| Data | PostgreSQL (prod); SQLite bundle for local dev (`instance/carbon_calculator.db`) |
+| Deploy | Railway — separate frontend (NGINX) and API (Gunicorn) services |
+
+---
+
+## Repository layout
+
+```
+CarbonCoach/
+├── README.md                 ← you are here
+├── RAILWAY_SETUP.md          ← production ops & CLI cheatsheet
+└── carbon-calculator/
+    ├── backend/              ← Flask API, engines, migrations
+    └── frontend/             ← chat UI + recommendations page
+```
+
+---
+
+## Quick start (local)
+
+**Prerequisites:** Python 3.8+, [Anthropic API key](https://console.anthropic.com/)
+
+### Fast path — SQLite (no Postgres install)
+
+```bash
+cd carbon-calculator/backend
+python3 -m venv venv && source venv/bin/activate   # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+cp .env.example .env
+# Set ANTHROPIC_API_KEY in .env (DATABASE_URL optional — defaults to SQLite)
+python3 app.py
+```
+
+Backend: **http://localhost:5001** (default `PORT`)
+
+```bash
+# Separate terminal
+cd carbon-calculator/frontend
+python3 -m http.server 8000
+```
+
+For local API calls, point `carbon-calculator/frontend/session.js` at `http://localhost:5001/api` (production already uses Railway).
+
+Open **http://localhost:8000** and walk through the chat, then open the recommendations view.
+
+### Full path — PostgreSQL (matches production)
+
+```bash
+brew install postgresql && brew services start postgresql   # macOS example
+createdb carbon_calculator
+```
+
+```env
+# .env
+ANTHROPIC_API_KEY=your_key
+DATABASE_URL=postgresql://username:password@localhost:5432/carbon_calculator
+FLASK_ENV=development
+SECRET_KEY=your_secret_key
+```
+
+Populate or migrate data as needed via `data/populate_data.py` and Flask-Migrate.
+
+---
+
+## Features
+
+- **Conversational onboarding** — Claude-led chat with section guardrails and progress (0–100%)
+- **Transparent calculations** — Home (electricity, heating, solar), transport (MPG DB + flights), consumption (diet + shopping)
+- **Incentive matching** — Federal/state programs filtered by technology and location
+- **Two recommendation modes** — Technology diagnostics vs. lifestyle changes from breakdown analysis
+- **Privacy-first** — UUID sessions in `localStorage`; no user accounts
+
+---
+
+## Database (high level)
+
+| Tables / data | Role |
+|---------------|------|
+| `sessions`, `user_responses` | Conversation state |
+| `carbon_calculations`, `calculation_breakdowns` | Results and audit trail |
+| `vehicle_mpg` | Year/make/model efficiency lookup |
+| `federal_programs`, `state_programs`, technology mappings | DSIRE-derived incentive data |
+| `emission_factors`, `electricity_rates` | Regional grid and unit factors |
+
+---
+
+## API
+
+| Method | Endpoint | Purpose |
+|--------|----------|---------|
+| `GET` | `/api/session/{session_id}` | Create or resume session |
+| `POST` | `/api/conversation` | Chat turn + structured extraction |
+| `POST` | `/api/calculate` | Run footprint calculation |
+| `GET` | `/api/calculations/{session_id}` | Stored results + breakdown |
+| `GET` | `/api/recommendations/{session_id}` | Diagnostic + lifestyle recs |
+| `GET` | `/api/health` | Liveness check |
+
+```bash
+curl http://localhost:5001/api/health
+curl -X POST http://localhost:5001/api/conversation \
+  -H "Content-Type: application/json" \
+  -d '{"session_id": "demo-session", "message": "I live in Phoenix, Arizona"}'
+```
+
+---
+
+## Test scenario (Phoenix, AZ)
+
+| Input | Value |
+|-------|--------|
+| Location | Phoenix, Arizona · 2 people · house |
+| Home | 2000 sq ft · $150/mo electric · gas heat $80/mo · no solar |
+| Transport | 2020 Honda Civic · 15,000 mi/yr · 2 domestic flights |
+| Consumption | Meat eater · moderate shopping |
+
+**Expected:** ~14–16 t CO₂/year; heat pump and solar opportunities with state/federal program references.
+
+---
+
+## Deployment
+
+Production runs on **Railway** (three services: API, NGINX frontend, Postgres). See **[RAILWAY_SETUP.md](RAILWAY_SETUP.md)** for domains, env vars, and CLI workflows.
+
+```env
+ANTHROPIC_API_KEY=...
+DATABASE_URL=postgresql://...
+FLASK_ENV=production
+SECRET_KEY=...
+```
+
+---
+
+## Data sources
+
+- EPA **eGRID** (electricity), **GHG emission factors**, **Fuel Economy** (vehicle MPG)
+- **DSIRE**-style federal/state program imports (rebates, credits, technology tags)
+
+---
+
+## Extending the project
+
+**Emission factors** — `carbon-calculator/backend/data/populate_data.py`  
+**Conversation flow** — `llm_service.py` (`sections`, `section_progress`)  
+**Recommendation logic** — `diagnostic_recommendations.py`, `lifestyle_recommendations.py`
+
+---
+
+## Troubleshooting
+
+| Issue | Check |
+|-------|--------|
+| DB errors | `DATABASE_URL`, Postgres running, or use default SQLite |
+| API key | `ANTHROPIC_API_KEY` in `.env` |
+| Frontend ↔ backend | Backend on **5001**; CORS enabled; `session.js` `apiBaseUrl` |
+| Empty recommendations | DB populated; complete all conversation sections before calculate |
+
+---
+
+## Contributing
+
+Issues and PRs welcome. Fork → branch → test the full chat → results → recommendations path → open a PR.
+
+---
+
+Climate tech prototype built to show **usable AI** paired with **rigorous domain logic** and **real incentive data**.
