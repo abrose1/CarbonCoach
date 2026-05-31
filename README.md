@@ -31,6 +31,22 @@ CarbonCoach guides people through a mobile-friendly chat to estimate annual CO�
 - **API:** https://carbonbackend.up.railway.app  
 - **Health:** `GET /api/health`
 
+### Screenshots
+
+<p align="center">
+  <img src="docs/screenshots/chat-mobile.png" alt="CarbonCoach conversational UI on mobile" width="280" />
+  &nbsp;
+  <img src="docs/screenshots/chat-desktop.png" alt="CarbonCoach conversational UI on desktop" width="520" />
+</p>
+
+<p align="center">
+  <em>Live production app</em> — chat onboarding (mobile + desktop) and the recommendations action plan.
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/recommendations-mobile.png" alt="Personalized recommendations with incentive context" width="280" />
+</p>
+
 ---
 
 ## How it works
@@ -221,6 +237,10 @@ SECRET_KEY=...
 ## Contributing
 
 Issues and PRs welcome. Fork → branch → test the full chat → results → recommendations path → open a PR.
+
+## License
+
+[MIT](LICENSE) — Copyright (c) 2025 Andrew Brose
 
 ---
 
