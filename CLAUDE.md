@@ -214,7 +214,6 @@ carbon-calculator/
 │   ├── session.js              # Session management and API communication
 │   ├── carbon_coach_avatar.png # Assistant avatar image
 │   └── Gemini_Generated_Image_*.png # Background images (3 available, 1 active)
-└── README.md                   # Setup instructions
 Success Criteria
 Working Prototype That:
 Completes full conversation flow from introduction to recommendations
