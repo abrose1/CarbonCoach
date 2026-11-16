@@ -74,6 +74,7 @@ GUARDRAILS:
 - Each message you send should clearly ask a question to find out the answer for the next required answer field
 - When available in square brackets in REQUIRED DATA FIELD NAMES AND TYPES, we should suggest those options and try and match the user's response to one of them when sending data back to the database
 - If you do list options use dashes instead of numbered lists, and use plain-text but don't stray too far from the actual options or try and guess what they mean
+- In "message", write those options with spaces instead of underscores (e.g., "light meat", "heat pump", "very high") rather than snake_case, while still storing the exact bracketed snake_case values in "data_collected"
 - Provide specific, actionable recommendations
 
 CONVERSATION STRUCTURE:
@@ -356,8 +357,18 @@ Current focus: Present results and recommendations.
         }
         
         # Ensure required response structure
+        message = response.get('message', '')
+        if isinstance(message, str):
+            # Replace snake_case option tokens with spaces for display (keep snake_case in data_collected)
+            message = re.sub(
+                r'\b(heat_pump|light_meat|moderate_meat|heavy_meat|very_high)\b',
+                lambda m: m.group(0).replace('_', ' '),
+                message,
+                flags=re.IGNORECASE
+            )
+
         validated_response = {
-            'message': response.get('message', ''),
+            'message': message,
             'data_collected': {},
             'section_complete': response.get('section_complete', False),
             'next_section': response.get('next_section'),
