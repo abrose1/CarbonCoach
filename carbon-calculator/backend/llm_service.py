@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 class ConversationManager:
     def __init__(self):
         self.client = None
-        self.model = "claude-sonnet-4-6"
+        self.model = "claude-sonnet-5-5"
         
         # Conversation flow sections
         self.sections = ['introduction', 'home_energy', 'transportation', 'consumption', 'results']
@@ -223,7 +223,9 @@ Current focus: Present results and recommendations.
             # Call Claude API
             response = self._get_client().messages.create(
                 model=self.model,
-                max_tokens=1000,
+                max_tokens=4096,
+                thinking={"type": "between_tools"},
+                output_config={"effort": "medium"},
                 system=system_prompt,
                 messages=[{
                     "role": "user",
@@ -231,7 +233,12 @@ Current focus: Present results and recommendations.
                 }]
             )
             
-            assistant_message = response.content[0].text
+            assistant_message = next(
+                (block.text for block in response.content if block.type == "text"),
+                ""
+            )
+            if not assistant_message:
+                logger.warning(f"No text block in Claude response (stop_reason={response.stop_reason})")
 
             # Parse and validate JSON response (handles code fences, surrounding text, and literal newlines)
             parsed_response = self._parse_assistant_response(assistant_message, session.current_section)

@@ -15,7 +15,7 @@ CarbonCoach guides people through a mobile-friendly chat to estimate annual COâ‚
 
 | Area | What we built |
 |------|----------------|
-| **Hybrid AI + engineering** | Structured data collection via Claude (`claude-sonnet-4-6`); emissions from `carbon_calc.py`, not LLM guesses |
+| **Hybrid AI + engineering** | Structured data collection via Claude (`claude-sonnet-5-5`); emissions from `carbon_calc.py`, not LLM guesses |
 | **Real-world data** | Production PostgreSQL: **13,041** vehicle MPG rows, **680** DSIRE-style programs, grid factors for all **50** states |
 | **Decision support** | Diagnostic engine (tech upgrades + program matching) and lifestyle engine (behavioral changes from calculation breakdowns) |
 | **Shipped product** | Live on Railway: NGINX frontend + Gunicorn Flask API + managed Postgres ([deployment notes](RAILWAY_SETUP.md)) |
