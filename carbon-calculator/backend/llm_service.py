@@ -86,7 +86,7 @@ You are currently in the "{section}" section. Guide the user through these topic
 5. Results: Carbon footprint breakdown and recommendations
 
 RESPONSE FORMAT:
-Always respond in JSON format:
+Always respond with valid JSON only (no markdown code fences or extra text outside the JSON). Escape any line breaks inside "message" as \n:
 {{
     "message": "Your conversational response here",
     "data_collected": {{"key": "value"}},
@@ -232,25 +232,8 @@ Current focus: Present results and recommendations.
             
             assistant_message = response.content[0].text
 
-            # Strip markdown code fences that Claude 4.6+ wraps around JSON responses
-            clean_message = re.sub(r'^```(?:json)?\s*|\s*```$', '', assistant_message.strip())
-
-            # Try to parse JSON response
-            try:
-                parsed_response = json.loads(clean_message)
-                
-                # Validate and fix the response structure
-                parsed_response = self._validate_response_structure(parsed_response, session.current_section)
-                
-            except json.JSONDecodeError:
-                # Fallback if Claude doesn't return JSON
-                parsed_response = {
-                    "message": assistant_message,
-                    "data_collected": {},
-                    "section_complete": False,
-                    "next_section": None,
-                    "needs_clarification": []
-                }
+            # Parse and validate JSON response (handles code fences, surrounding text, and literal newlines)
+            parsed_response = self._parse_assistant_response(assistant_message, session.current_section)
             
             # Log conversation
             conv_log = ConversationLog(
@@ -323,6 +306,42 @@ Current focus: Present results and recommendations.
                 'message': 'Sorry, I encountered an error processing your message. Please try again.'
             }
     
+    def _parse_assistant_response(self, assistant_message: str, current_section: str) -> Dict[str, Any]:
+        """Parse Claude's JSON response robustly, allowing literal control chars and fenced/embedded JSON."""
+        text = assistant_message.strip()
+        candidates = [
+            # 1. Strip outer markdown code fences if present
+            re.sub(r'^```(?:json)?\s*|\s*```$', '', text),
+        ]
+
+        # 2. Extract JSON object inside any markdown code fence
+        fenced_match = re.search(r'```(?:json)?\s*(\{[\s\S]*?\})\s*```', text)
+        if fenced_match:
+            candidates.append(fenced_match.group(1))
+
+        # 3. Extract outermost JSON object boundaries if surrounded by prose
+        start = text.find('{')
+        end = text.rfind('}')
+        if start != -1 and end > start:
+            candidates.append(text[start:end + 1])
+
+        for candidate in candidates:
+            try:
+                parsed = json.loads(candidate, strict=False)
+                if isinstance(parsed, dict):
+                    return self._validate_response_structure(parsed, current_section)
+            except json.JSONDecodeError:
+                continue
+
+        logger.warning("Failed to parse assistant response as JSON; falling back to raw text")
+        return {
+            "message": assistant_message,
+            "data_collected": {},
+            "section_complete": False,
+            "next_section": None,
+            "needs_clarification": []
+        }
+
     def _validate_response_structure(self, response: Dict, current_section: str) -> Dict:
         """
         Validate Claude's response structure and field names.
